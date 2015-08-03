@@ -12,10 +12,13 @@ parse it once and store it using different format (or even slots). This is total
 acceptable given that it uses data EXCLUSIVELY from here as this slot is the
 only place guaranteed to have correct resource locator. Also, this approach
 eliminates the possibility of \"side effects\"."
+             :type string
              :reader link-resource)
    (current-stage :initarg :stage
+                  :type stage
                   :accessor link-current-stage)
    (initiator :initarg :initiator
+              :type backend
               :documentation "Holds an instance that initiated link (e.g. either client or a server).
 A correct backend MUST store it's instance there for consistency reasons."
               :reader link-initiator))
@@ -23,6 +26,7 @@ A correct backend MUST store it's instance there for consistency reasons."
 
 (defclass transport ()
   ((read-callback :initarg :read-callback
+                  :type function
                   :reader transport-read-callback))
   (:documentation "Defines hardware NIC bindings. This one operates on raw
 bytes stream and passes them to backend to be processed. Well, actually it
@@ -57,7 +61,7 @@ bytes so that transport doesn't need to fiddle with it."))
 (defgeneric receive-message (protocol transport link)
   (:documentation "Receives encoded message from given link according to given
 protocol using given backend. MUST return stream with raw bytes that backend
-then reads."
+then reads."))
 
 (define-condition link-condition ()
   ((link :initarg :link))

@@ -11,7 +11,11 @@
 
   ;; Protocol
   (:export #:stage
+           #:id
+           #:dispatcher
            #:next-stage
+           #:stage-id
+           #:stage-dispatcher
            #:stage-next-stage
            #:protocol
            #:id
@@ -52,13 +56,8 @@
            #:link
            #:session-link
            #:message
-           #:type
-           #:resource
-           #:parameters
            #:content
            #:session
-           #:message-resource
-           #:message-parameters
            #:message-content
            #:message-session
            #:backend

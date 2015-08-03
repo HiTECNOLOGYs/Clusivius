@@ -2,6 +2,7 @@
 
 (defclass session ()
   ((link :initarg :link
+         :type link
          :accessor session-link))
   (:documentation "Holds connection session.
 The backend implementation is free to choose how (and even whether) to store
@@ -9,16 +10,13 @@ this session. It MAY exist only until connection is processed or it may
 persist."))
 
 (defclass message ()
-  ((type :initarg :type
-         :reader message-type)
-   (resource :initarg :resource
-             :reader message-resource)
-   (parameters :initarg :parameters
-               :reader message-parameters)
+  ((session :initarg :session
+            :type session
+            :reader message-session)
    (content :initarg :content
-            :reader message-content)
-   (session :initarg :session
-            :reader message-session))
+            :initform nil
+            :type list
+            :reader message-content))
   (:documentation "Protocol message.
 This stores raw or decoded message data since messages are serialized using
 given backend before being sent over the wire or after being received from.
@@ -28,7 +26,8 @@ unencoded messages (which are instances of this class or it's children)."))
 
 (defclass backend ()
   ((protocol :initarg :protocol
-             :reader server-protocol))
+             :type protocol
+             :reader backend-protocol))
   (:documentation "Implements data decoding and processing.
 
 This hooks up into transport and receives messages data from the stream,
@@ -60,6 +59,30 @@ This function is called by INITIALIZE-INSTANCE when backend instance is created.
 
 (defgeneric deinit-backend (backend)
   (:documentation "Deinitializes backend."))
+
+(defgeneric perform-stage (protocol stage session message)
+  (:documentation "Executes protocol stage on given session."))
+
+(defun get-stage (protocol stage-id)
+  (find stage-id (protocol-stages protocol)
+        :key #'stage-id))
+
+(defmethod perform-stage ((protocol protocol)
+                          (stage stage)
+                          (session session)
+                          message)
+  (with-slots (dispatcher) stage
+    (funcall dispatcher session message)))
+
+(defmethod perform-stage :after ((protocol protocol)
+                                 (stage stage)
+                                 (session session)
+                                 message)
+  (with-slots (next-stage) stage
+    (if (null next-stage)
+      (signal 'protocol-terminated)
+      (setf (link-current-stage (session-link session))
+            (get-stage protocol next-stage)))))
 
 (define-condition session-condition ()
   ((session :initarg :session))

@@ -1,22 +1,30 @@
 (in-package #:clusivius)
 
 (defclass stage ()
-  ((next-stage :initarg :next-stage
-               :reader stage-next-stage
-               :documentation "If NIL, protocol is terminated."))
+  ((id :initarg :id
+       :type symbol
+       :reader stage-id)
+   (dispatcher :initarg :dispatcher
+               :type function
+               :reader stage-dispatcher)
+   (next-stage :initarg :next-stage
+               :initform nil
+               :documentation "If NIL, protocol is terminated."
+               :type symbol
+               :reader stage-next-stage))
   (:documentation "Represent a single protocol execution state."))
 
 (defclass protocol ()
   ((id :initarg :id
+       :type symbol
        :reader protocol-id)
    (initial-stage :initarg :initial-stage
+                  :type stage
                   :reader protocol-initial-stage)
    (stages :initarg :stages
+           :type (list stage)
            :reader protocol-stages))
   (:documentation "Contains an info on protocol and an identifier."))
-
-(defgeneric perform-stage (protocol stage)
-  (:documentation "Executes protocol stage."))
 
 (define-condition protocol-condition ()
   ((protocol :initarg :protocol))
