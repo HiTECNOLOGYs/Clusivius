@@ -112,10 +112,10 @@ This function is called by INITIALIZE-INSTANCE when backend instance is created.
 (defclass server (backend) ()
   (:documentation "Implements server backend."))
 
-(defgeneric start-server (protocol backend)
+(defgeneric start-server (backend)
   (:documentation "Starts protocol server with given backend."))
 
-(defgeneric listen-for-connections (protocol server)
+(defgeneric listen-for-connections (server)
   (:documentation "Blocks and listens for incoming connections.
 The code on the inside should receive PROTOCOL-TERMINATED signal when it's
 about to be terminated so it can do proper cleanup. That dosn't elimiate need
@@ -129,10 +129,10 @@ stop."))
 (defclass client (backend) ()
   (:documentation "Implements server backend."))
 
-(defgeneric start-client (protocol backend)
+(defgeneric start-client (backend)
   (:documentation "Starts protocol client with given backend."))
 
-(defgeneric connect-client (protocol client uri)
+(defgeneric connect-client (client uri)
   (:documentation "Connects client to given URI returning established connection.
 The code on the inside should receive PROTOCOL-TERMINATED signal when it's
 about to be terminated so it can do proper cleanup. That dosn't elimiate need

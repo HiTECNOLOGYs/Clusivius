@@ -5,7 +5,6 @@
        :type symbol
        :reader stage-id)
    (dispatcher :initarg :dispatcher
-               :type function
                :reader stage-dispatcher)
    (next-stage :initarg :next-stage
                :initform nil
@@ -22,7 +21,6 @@
                   :type stage
                   :reader protocol-initial-stage)
    (stages :initarg :stages
-           :type (list stage)
            :reader protocol-stages))
   (:documentation "Contains an info on protocol and an identifier."))
 

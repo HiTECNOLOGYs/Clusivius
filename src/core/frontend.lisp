@@ -19,4 +19,4 @@
   (let ((stages (parse-protocol-body body)))
     `(defclass ,name (,protocol-class)
        ((initial-stage :initform ,(first stages))
-        (stages :initform ,stages)))))
+        (stages :initform (list ,@stages))))))
