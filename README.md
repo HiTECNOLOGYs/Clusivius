@@ -19,7 +19,7 @@ And the officially supported (or planned) backends are:
 
 * [ ] Plan text (raw chunks of Unicode text)
 * [ ] Plan binary (raw chunks of binary data)
-* [ ] HTTP
-* [ ] HTTPS
+* [X] HTTP
+* [X] HTTPS
 
 You can define your own, of course.
