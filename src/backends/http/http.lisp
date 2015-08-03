@@ -52,7 +52,9 @@
              :accessor http-server-sessions)
    (dispatch-table :initarg :dispatch-table
                    :initform (make-hash-table :test 'equal)
-                   :accessor http-server-dispatch-table))
+                   :accessor http-server-dispatch-table)
+   (acceptor :initarg :acceptor
+             :reader http-server-acceptor))
   (:documentation "Wrapper over hunchentoot."))
 
 (defun get-resource (server type uri)
@@ -97,12 +99,26 @@
          (method (hunchentoot:request-method request))
          (uri (hunchentoot:request-uri request))
          (resource (get-resource server method uri)))
-    (clusivius:perform-stage protocol
-                             resource
-                             (get-session)
-                             (parse-request request))))
+    (cond
+      ((null resource)
+       (setf (hunchentoot:return-code hunchentoot:*reply*)
+             hunchentoot:+http-not-found+)
+       (hunchentoot:abort-request-handler))
+      (t
+       (clusivius:perform-stage protocol
+                                resource
+                                (get-session)
+                                (parse-request request))))))
 
 (defmethod clusivius:init-backend ((server http-server))
-  (hunchentoot:start (make-instance 'http-acceptor
-                                    :server server
-                                    :port (http-server-port server))))
+  (initialize-dispatch-table server
+                             (clusivius:protocol-stages
+                               (clusivius:backend-protocol server)))
+  (setf (slot-value server 'acceptor)
+        (make-instance 'http-acceptor
+                       :server server
+                       :port (http-server-port server))))
+
+(defmethod clusivius:start-server ((server http-server))
+  (hunchentoot:start (http-server-acceptor server))
+  server)

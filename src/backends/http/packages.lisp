@@ -45,6 +45,8 @@
            #:port
            #:sessions
            #:dispatch-table
+           #:acceptor
            #:http-server-port
            #:http-server-sessions
-           #:http-server-dispatch-table))
+           #:http-server-dispatch-table
+           #:http-server-acceptor))
