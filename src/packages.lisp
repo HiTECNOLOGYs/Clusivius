@@ -1,9 +1,11 @@
 (defpackage #:clusivius.utilities
+  (:nicknames #:janus.utilities)
   (:documentation "Generic code.")
   (:use #:closer-common-lisp
         #:alexandria))
 
 (defpackage #:clusivius
+  (:nicknames #:janus)
   (:documentation "Core components.")
   (:use #:closer-common-lisp
         #:clusivius.utilities
