@@ -35,7 +35,7 @@
   (:documentation "Signaled when protocol failed to handle a stage."))
 
 (define-condition protocol-warning (protocol-condition) ()
-  (:documentation "Signaled when non-fated error occured during protocol stage."))
+  (:documentation "Signaled when non-fatal error occured during protocol stage."))
 
 (define-condition protocol-violation (protocol-condition) ()
   (:documentation "Signaled when protocol was executed improperly."))
