@@ -47,7 +47,7 @@
            #:establish-link
            #:close-link
            #:send-message
-           #:receive-massage
+           #:receive-message
            #:link-condition
            #:link-timed-out
            #:link-closed
