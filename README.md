@@ -17,8 +17,8 @@ The officially supported (or planned) transports are:
 
 And the officially supported (or planned) backends are:
 
-* [ ] Plan text (raw chunks of Unicode text)
-* [ ] Plan binary (raw chunks of binary data)
+* [ ] Plain text (raw chunks of Unicode text)
+* [ ] Plain binary (raw chunks of binary data)
 * [X] HTTP
 * [X] HTTPS
 
